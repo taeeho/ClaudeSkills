@@ -110,6 +110,36 @@ OS에 맞춰 자동 expand 됩니다 (`PowerShell` 은 `$env:USERPROFILE`, `Bash
 
 ---
 
+## hooks/ — 이 레포에 포함됨 (2026-05 이후)
+
+`hooks/skill_reminder.py` (UserPromptSubmit) + `hooks/session_wiki_check.py` (Stop) 등 사용자 hook 스크립트는 **이 레포의 `hooks/` 서브디렉토리에서 함께 동기화**됩니다.
+
+단, `settings.json`의 hook 등록부는 머신마다 절대경로가 달라(`C:\...` vs `/Users/...`) 별도 관리합니다.
+
+새 머신 첫 셋업 시 `settings.json`에 추가할 항목 (경로만 머신에 맞게 수정):
+
+```jsonc
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command",
+        "command": "python \"<repo경로>/hooks/skill_reminder.py\"",
+        "timeout": 5 }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command",
+        "command": "python \"<repo경로>/hooks/session_wiki_check.py\"",
+        "timeout": 10 }] }
+    ]
+  }
+}
+```
+
+- Windows 회사 PC 예: `"C:\\Users\\<user>\\.claude\\skills\\hooks\\skill_reminder.py"`
+- Mac 예: `"/Users/<user>/.claude/skills/hooks/skill_reminder.py"`
+
+---
+
 ## 머신별 추가 설정 (이 레포에 포함되지 않음)
 
 다음 파일들은 머신마다 다르므로 별도 관리:
@@ -117,16 +147,16 @@ OS에 맞춰 자동 expand 됩니다 (`PowerShell` 은 `$env:USERPROFILE`, `Bash
 | 파일 | 위치 | 용도 |
 |---|---|---|
 | `CLAUDE.md` | `~/.claude/CLAUDE.md` | 사용자 프로필 (이름, 역할, 톤, 스택) |
-| `settings.json` | `~/.claude/settings.json` | 글로벌 권한, hook, theme |
+| `settings.json` | `~/.claude/settings.json` | 글로벌 권한, hook 등록부, theme |
 | `settings.local.json` | `~/.claude/settings.local.json` | 머신별 권한 allow 리스트 |
-| `hooks/` | `~/.claude/hooks/` | Stop hook, PreToolUse 등 사용자 hook 스크립트 |
 
 새 머신 첫 셋업 시:
 
 1. [Claude Code 설치](https://docs.claude.com/en/docs/claude-code/setup)
 2. 이 레포를 위 절차로 clone
 3. `~/.claude/CLAUDE.md` 직접 작성 또는 다른 머신에서 복사
-4. (선택) 권한 allow 리스트는 사용하면서 점차 추가
+4. `~/.claude/settings.json`에 위 hook 등록부 추가 (경로 머신 기준)
+5. (선택) 권한 allow 리스트는 사용하면서 점차 추가
 
 ---
 
