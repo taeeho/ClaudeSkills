@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ax.local/ouroboros/verdict.schema.json",
+  "title": "Ouroboros Cycle Verdict",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["score", "defects", "checks", "summary", "ready_for_merge"],
+  "properties": {
+    "score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "0~100. 수락기준50 + 검증명령25 + 결함잔존15 + plan일관성10 가중평균."
+    },
+    "defects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["signature", "severity", "where", "what", "suggested_fix"],
+        "properties": {
+          "signature": {
+            "type": "string",
+            "description": "재출현 감지를 위한 안정 식별자. 예: 'src/auth.py:verify_token' 또는 'http:401:token-expired'.",
+            "minLength": 3,
+            "maxLength": 200
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low"]
+          },
+          "where": {
+            "type": "string",
+            "description": "파일경로:라인 또는 함수/엔드포인트 이름",
+            "maxLength": 300
+          },
+          "what": {
+            "type": "string",
+            "description": "결함을 한 줄로",
+            "maxLength": 400
+          },
+          "suggested_fix": {
+            "type": "string",
+            "description": "수정 방향 한 줄",
+            "maxLength": 400
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion", "passed", "evidence"],
+        "properties": {
+          "criterion": {
+            "type": "string",
+            "description": "plan.md 의 수락 기준 원문",
+            "maxLength": 500
+          },
+          "passed": { "type": "boolean" },
+          "evidence": {
+            "type": "string",
+            "description": "어떤 명령/관찰로 확인했는지",
+            "maxLength": 400
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "description": "이번 사이클 상태 1~2문장",
+      "maxLength": 600
+    },
+    "ready_for_merge": {
+      "type": "boolean",
+      "description": "score >= 95 AND defects 가 비어 있을 때만 true"
+    }
+  }
+}
