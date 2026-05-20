@@ -90,10 +90,8 @@ Rename-Item "$env:USERPROFILE\.claude\ClaudeSkills-main" "skills"
 | **guidebook-ui-preset** | AX팀 Claude 가이드북 스타일 React 프리셋 |
 | **frontend-design** | 디자인 우선 프론트엔드 코드 생성 |
 | **ui-ux-pro-max** | UI/UX 디자인 인텔리전스 (50 styles, 21 palettes 등) |
-| **senior-architect** | 시스템 아키텍처 설계 |
-| **senior-backend** | 백엔드 개발 (Node, Express, Go, Python, Postgres, GraphQL) |
-| **senior-frontend** | 프론트엔드 개발 (React, Next.js, TypeScript, Tailwind) |
-| **senior-prompt-engineer** | LLM 프롬프트 엔지니어링 |
+| **handoff** | 새 세션이 이어받을 수 있게 대화 압축 (임시 디렉토리 저장) |
+| **ouroboros-loop** | Claude ↔ Codex 6-phase 무인 자동 루프 (최대 9 사이클) |
 
 > 각 스킬의 상세 설명은 해당 폴더의 `SKILL.md` 참고.
 
